@@ -3,27 +3,32 @@ FROM ubuntu:18.04
 WORKDIR /usr/src/install
 
 # Environment variables
-ENV RUSTUP_HOME=/usr/local/rustup \
+ENV RUSTUP_HOME=/usr/local/sgx \
     CARGO_HOME=/usr/local/cargo \
     PATH=/usr/local/cargo/bin:$PATH
 
+
+RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
 COPY scripts/ .
-RUN ./install_sgx.sh
+RUN ./install_dcap.sh
 
 ARG DUMMY1=0
 
-RUN apt-get update && apt-get install -y git make \
-    && git clone https://github.com/gianlu33/rust-sgx-apps.git \
-    && cd rust-sgx-apps && make install
+WORKDIR /opt/intel
 
-ARG DUMMY2=0
+RUN wget https://download.01.org/intel-sgx/latest/dcap-latest/linux/distro/ubuntu18.04-server/sgx_linux_x64_sdk_2.12.100.3.bin 
+RUN chmod ugo+x sgx_linux_x64_sdk_2.12.100.3.bin
+RUN echo yes | ./sgx_linux_x64_sdk_2.12.100.3.bin
 
-RUN git clone https://github.com/gianlu33/reactive-net.git \
-    && git clone https://github.com/gianlu33/rust-sgx-gen.git \
-    && git clone --branch sgx-extension https://github.com/gianlu33/reactive-tools.git \
-    && pip install reactive-net/ \
-    && pip install rust-sgx-gen/ \
-    && pip install reactive-tools/ \
-    && rm -rf /usr/src/install
+WORKDIR /usr/src/install
+
+RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
+
+RUN apt-get update && apt-get install -y git
+RUN git clone https://github.com/intel/SGXDataCenterAttestationPrimitives.git
+RUN git clone https://github.com/intel/linux-sgx.git
+
+ARG DUMMY1=0
+     
 
 WORKDIR /usr/src/app
