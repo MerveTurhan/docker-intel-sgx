@@ -24,11 +24,13 @@ WORKDIR /usr/src/install
 
 RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
 
+
+WORKDIR /usr/src/example
+
 RUN apt-get update && apt-get install -y git
 RUN git clone https://github.com/intel/SGXDataCenterAttestationPrimitives.git
 RUN git clone https://github.com/intel/linux-sgx.git
-
-ARG DUMMY1=0
+RUN rm -rf /usr/src/install
      
 
 WORKDIR /usr/src/app

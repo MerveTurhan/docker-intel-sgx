@@ -17,7 +17,7 @@ echo "Temporary directory: $tmp_dir"
 pwd=$(pwd)
 cd $tmp_dir
 
-apt-get update && apt-get install -y --no-install-recommends ca-certificates gcc libc6-dev wget gnupg2
+apt-get update && apt-get install -y --no-install-recommends --yes ca-certificates gcc libc6-dev wget gnupg2
 echo "deb [arch=amd64] $sgx_repo bionic main" | tee /etc/apt/sources.list.d/intel-sgx.list
 wget -qO - $sgx_repo/intel-sgx-deb.key | apt-key add -
 apt-get update
