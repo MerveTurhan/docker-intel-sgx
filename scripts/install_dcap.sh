@@ -17,22 +17,11 @@ echo "Temporary directory: $tmp_dir"
 pwd=$(pwd)
 cd $tmp_dir
 
-apt-get update && apt-get install -y --no-install-recommends --yes ca-certificates gcc libc6-dev wget gnupg2
-echo "deb [arch=amd64] $sgx_repo bionic main" | tee /etc/apt/sources.list.d/intel-sgx.list
+apt-get update && apt-get install -y --no-install-recommends ca-certificates gcc libc6-dev wget gnupg2
 wget -qO - $sgx_repo/intel-sgx-deb.key | apt-key add -
+echo "deb [arch=amd64] $sgx_repo bionic main" | tee /etc/apt/sources.list.d/intel-sgx.list
 apt-get update
 apt-get install -y  build-essential ocaml automake autoconf libtool wget python libssl-dev curl
-apt-get install -y  debhelper zip libcurl4-openssl-dev
-apt-get install -y --no-install-recommends apt-utils
-apt-get install -y dialog apt-utils
-
-curl -sL https://deb.nodesource.com/setup_14.x | bash -
-apt-get install -y nodejs
-apt-get install -y libsgx-urts libsgx-dcap-ql
-apt-get install -y libsgx-dcap-default-qpl 
-apt-get install -y libsgx-dcap-ql-dev libsgx-enclave-common-dev libsgx-dcap-default-qpl-dev libsgx-quote-ex-dev libsgx-dcap-quote-verify-dev
-
-apt update
 
 cd $pwd
 

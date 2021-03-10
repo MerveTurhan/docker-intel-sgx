@@ -7,30 +7,22 @@ ENV RUSTUP_HOME=/usr/local/sgx \
     CARGO_HOME=/usr/local/cargo \
     PATH=/usr/local/cargo/bin:$PATH
 
-
-RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
 COPY scripts/ .
 RUN ./install_dcap.sh
 
 ARG DUMMY1=0
 
-WORKDIR /opt/intel
-
 RUN wget https://download.01.org/intel-sgx/latest/dcap-latest/linux/distro/ubuntu18.04-server/sgx_linux_x64_sdk_2.12.100.3.bin 
 RUN chmod ugo+x sgx_linux_x64_sdk_2.12.100.3.bin
-RUN echo yes | ./sgx_linux_x64_sdk_2.12.100.3.bin
-
-WORKDIR /usr/src/install
+RUN yes | ./sgx_linux_x64_sdk_2.12.100.3.bin
 
 RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
-
-
-WORKDIR /usr/src/example
 
 RUN apt-get update && apt-get install -y git
 RUN git clone https://github.com/intel/SGXDataCenterAttestationPrimitives.git
 RUN git clone https://github.com/intel/linux-sgx.git
-RUN rm -rf /usr/src/install
+
+ARG DUMMY1=0
      
 
 WORKDIR /usr/src/app
